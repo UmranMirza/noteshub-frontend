@@ -142,13 +142,19 @@ async function confirmDelete() {
             Create your first note.
           </p>
 
-          <UButton
+          <!-- <UButton
             class="mt-6"
             icon="i-lucide-plus"
           >
             Create First Note
-          </UButton>
-
+          </UButton> -->
+ <UButton
+ class="mt-6"
+        icon="i-lucide-plus"
+        @click="createNote"
+      >
+        Create your first note.
+      </UButton>
         </div>
 
       </UCard>
