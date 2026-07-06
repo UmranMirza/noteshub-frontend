@@ -4,8 +4,16 @@ definePageMeta({
 })
 
 import NoteCard from '~/components/notes/NoteCard.vue'
+import CreateNoteModal from '~/components/notes/CreateNoteModal.vue'
 
 const store = useNotesStore()
+
+const openCreate = ref(false)
+
+function createNote() {
+  store.selectedNote = null
+  openCreate.value = true
+}
 
 onMounted(async () => {
   await store.fetchNotes()
@@ -18,27 +26,30 @@ async function changePage(page: number) {
 
 <template>
   <div>
-
+    <!-- Header -->
     <div class="mb-8 flex items-center justify-between">
-
       <div>
         <h1 class="text-3xl font-bold">
           My Notes
         </h1>
 
-        <p class="text-gray-500">
+        <p class="text-muted">
           {{ store.total }} Notes
         </p>
       </div>
 
-      <UButton icon="i-lucide-plus">
+      <UButton
+        icon="i-lucide-plus"
+        @click="createNote"
+      >
         New Note
       </UButton>
-
     </div>
 
-    <!-- Loading -->
+    <!-- Create Note Modal -->
+    <CreateNoteModal v-model="openCreate" />
 
+    <!-- Loading -->
     <div
       v-if="store.loading"
       class="grid gap-6 md:grid-cols-2 xl:grid-cols-3"
@@ -50,8 +61,34 @@ async function changePage(page: number) {
       />
     </div>
 
-    <!-- Notes -->
+    <!-- Empty State -->
+    <div
+      v-else-if="store.notes.length === 0"
+      class="py-20 text-center"
+    >
+      <UIcon
+        name="i-lucide-notebook-text"
+        class="mx-auto mb-4 h-16 w-16 text-muted"
+      />
 
+      <h2 class="text-2xl font-semibold">
+        No Notes Found
+      </h2>
+
+      <p class="mt-2 text-muted">
+        Create your first note to get started.
+      </p>
+
+      <UButton
+        class="mt-6"
+        icon="i-lucide-plus"
+        @click="createNote"
+      >
+        Create First Note
+      </UButton>
+    </div>
+
+    <!-- Notes -->
     <div
       v-else
       class="grid gap-6 md:grid-cols-2 xl:grid-cols-3"
@@ -64,10 +101,9 @@ async function changePage(page: number) {
     </div>
 
     <!-- Pagination -->
-
     <div
       v-if="store.totalPages > 1"
-      class="mt-8 flex justify-center"
+      class="mt-10 flex justify-center"
     >
       <UPagination
         v-model:page="store.page"
@@ -76,6 +112,5 @@ async function changePage(page: number) {
         @update:page="changePage"
       />
     </div>
-
   </div>
 </template>
