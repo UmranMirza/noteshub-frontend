@@ -12,9 +12,16 @@ function toggleTheme() {
   <UButton
     color="neutral"
     variant="ghost"
-    :icon="isDark ? 'i-lucide-sun' : 'i-lucide-moon'"
+    class="!w-auto !px-2 shrink-0"
     @click="toggleTheme"
   >
-    {{ isDark ? 'Light' : 'Dark' }}
+    <UIcon
+      :name="isDark ? 'i-lucide-sun' : 'i-lucide-moon'"
+      class="h-5 w-5"
+    />
+
+    <span class="ml-2 hidden md:inline">
+      {{ isDark ? 'Light' : 'Dark' }}
+    </span>
   </UButton>
 </template>
